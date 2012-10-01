@@ -1,0 +1,54 @@
+$def with (processed_image, url, faces, message)
+<!doctype html>
+<html>
+  <head>
+    <title>Dealwithitifier</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript">
+    $if faces:
+      var faces = [ 
+      $for face in faces: 
+         { x: $face.x, y: $face.y, height: $face.height(), width: $face.width() },
+      ];
+    </script>
+  </head>
+  <body>
+    $if url:
+        <img id="processed_image" src="$url">
+        
+
+        <script type="text/javascript">
+         function replay() {   
+            $$(".to_move").each(function(f, glasses) {
+            var img_offset = $$("#processed_image").position();
+              var face = faces[f];
+              glasses.width = face.width*1.2;
+              $$(glasses).css('top',-glasses.height+"px");
+              $$(glasses).css('left',(face.x + img_offset.left - glasses.width/2 - face.width/6) + "px");
+              if (true) {
+                $$(glasses).animate({
+                 top: face.y +img_offset.top - face.height/8 - glasses.height/2 +"px"
+                }, face.y*10);
+          
+                }
+              });
+            }  
+          $$(window).load(function() {
+            replay();
+            });
+
+        </script>
+    $if faces:
+        $for face in faces:
+            <img id="glass_$loop.index" style="position:absolute;top:0px;left:$(face.x)px" class="to_move" src="static/deal_with_it.png">
+    <div>
+    <form method="get" action="" style="float:left;">
+      <input name="url" value="$url" type="text" size="50" placeholder="Please do enter a URL here">
+      <input type="submit">
+    </form>
+    $if faces:
+        <button style="float:left" onclick="javascript:replay();void(0);">Replay</button>
+    </div>
+  </body>
+</html>
+        
